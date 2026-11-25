@@ -1,3 +1,5 @@
+*This project has been created as part of the 42 curriculum by elmondo.*
+
 # <img align="middle" height="115" src="https://raw.githubusercontent.com/ayogun/42-project-badges/main/badges/push_swape.png" alt="push_swap badge"/> <picture><source media="(prefers-color-scheme: dark)" srcset="https://readme-typing-svg.demolab.com/?font=Fira+Code&weight=600&size=55&pause=1000&color=58A6FF&vCenter=true&width=400&height=80&lines=push_swap"><source media="(prefers-color-scheme: light)" srcset="https://readme-typing-svg.demolab.com/?font=Fira+Code&weight=600&size=55&pause=1000&color=0366D6&vCenter=true&width=400&height=80&lines=push_swap"><img align="middle" src="https://readme-typing-svg.demolab.com/?font=Fira+Code&weight=600&size=55&pause=1000&color=0366D6&vCenter=true&width=400&height=80&lines=push_swap" alt="push_swap"/></picture>
 
 [![Common Core](https://img.shields.io/badge/-Common%20Core-24292e?style=flat&logo=data:image/svg%2Bxml;base64,PHN2ZyByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAzNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+NDI8L3RpdGxlPjxkZXNjPkxvZ28gNDIgY29uIHBhZGRpbmcgaW5mZXJpb3JlOiBHaXRIdWIgcmltdW92ZSBnbGkgYXR0cmlidXRpIHN0eWxlIGRhbCBtYXJrZG93biwgcXVpbmRpIGlsIG1hcmdpbmUgY2hlIGFsbGluZWEgbCdpY29uYSBhbCB0ZXN0byBkZWwgdGl0b2xvIGUnIGluY29ycG9yYXRvIG5lbCB2aWV3Qm94LiBJbCBnbGlmbyBvY2N1cGEgeSAzLjU3NC0yMC40MjYgZSBzb3R0byByZXN0YW5vIDEzLjU3NCB1bml0YScgdnVvdGU6IHJlc28gYSA0MnB4IGNvbiBhbGlnbj1taWRkbGUsIGlsIGdsaWZvIHN0YSB+MnB4IHNvcHJhIGxhIGJhc2VsaW5lIGRlbCB0aXRvbG8uIFBlciBhbHphcmxvIGFuY29yYSBzZXJ2b25vICsxIHVuaXRhJyBkaSB2aWV3Qm94IG9nbmkgKzEuMnB4IGRpIGhlaWdodCAoY2lyY2EgKzAuNnB4IGRpIHNvbGxldmFtZW50bywgYSBwYXJpdGEnIGRpIGRpbWVuc2lvbmUgZGVsIGdsaWZvKS48L2Rlc2M+PHN0eWxlPnBhdGh7ZmlsbDojMDAwMDAwfSBAbWVkaWEgKHByZWZlcnMtY29sb3Itc2NoZW1lOmRhcmspe3BhdGh7ZmlsbDojRkZGRkZGfX08L3N0eWxlPjxwYXRoIGQ9Ik0xOS41ODEgMTYuODUxSDI0di00LjQzOVpNMjQgMy41NzRoLTQuNDE5djQuNDJsLTQuNDE5IDQuNDE4djQuNDRoNC40MTl2LTQuNDRMMjQgNy45OTNabS00LjQxOSAwaC00LjQxOXY0LjQyem0tNi4zMjQgOC44MzhINC40MTlsOC44MzgtOC44MzhIOC44MzhMMCAxMi40MTJ2My41OTVoOC44Mzh2NC40MTloNC40MTl6Ii8+PC9zdmc+Cg==)](https://profile.intra.42.fr/users/elmondo)
@@ -9,7 +11,7 @@
 
 ---
 
-## 📖 Project Description
+## 📖 Description
 
 `push_swap` is a 42 School algorithm project. The program receives a list of integers, loads them into **stack A** and prints, on the standard output, the **shortest sequence of instructions** it can find to sort them in ascending order (smallest number on top), using a second, initially empty, **stack B**.
 
@@ -60,10 +62,16 @@ Each instruction is printed on its own line.
 
 ### Performance
 
-Measured on 100 random runs per size, verified with the provided `checker_linux`:
+Measured on 300 random runs per size (positive and negative numbers) and verified with `checker_linux` — every run sorted correctly (`OK`):
 
-| Numbers | Average | Worst seen | Typical 42 target |
-|:-------:|:-------:|:----------:|:-----------------:|
+| Numbers | Average | Worst seen | Limit in the subject |
+|:-------:|:-------:|:----------:|:--------------------:|
+| 3 | 1 | 2 | — |
+| 5 | 7 | 10 | — |
+| 100 | ~580 | 619 | fewer than 700 |
+| 500 | ~5090 | 5306 | no more than 5500 |
+
+-------:|:-------:|:----------:|:-----------------:|
 | 3 | 1 | 2 | ≤ 3 |
 | 5 | 7 | 10 | ≤ 12 |
 | 100 | ~580 | 626 | < 700 |
@@ -71,7 +79,7 @@ Measured on 100 random runs per size, verified with the provided `checker_linux`
 
 ---
 
-## ⚙️ Compilation & Usage
+## ⚙️ Instructions
 
 ### Requirements
 
@@ -207,6 +215,26 @@ push_swap/
 ├── checker_linux     # 42 checker (OK / KO / Error)
 └── libft/            # Personal libft + ft_printf + get_next_line
 ```
+
+---
+
+## 📚 Resources
+
+- 42 curriculum — *push_swap* subject (v10.1)
+- [Sorting algorithm](https://en.wikipedia.org/wiki/Sorting_algorithm) and [Time complexity](https://en.wikipedia.org/wiki/Time_complexity) — Wikipedia
+- [Linked list](https://en.wikipedia.org/wiki/Linked_list) — Wikipedia
+- [GNU Make manual](https://www.gnu.org/software/make/manual/make.html)
+- [AddressSanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizer) — memory error and leak detector used for testing
+
+### How AI was used
+
+An AI assistant was used on this project for the following tasks:
+
+- **Review and debugging** — it helped find and fix the stray debug output, the wrong ordering of stack B in the 4–5 numbers case and the missing integer-limit check.
+- **Tuning** — comparing chunk sizes for the chunk sort with random benchmarks.
+- **Testing and documentation** — writing the stress-test one-liners and this README.
+
+All AI-assisted changes were verified with `checker_linux`, random stress tests, AddressSanitizer and the Norminette.
 
 ---
 
