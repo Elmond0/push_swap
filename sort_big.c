@@ -41,78 +41,48 @@ int	**normalize_tab(int tab_size, int **tab)
 	return (norm);
 }
 
-static int	get_pos(t_list *lst, int target)
+static int	bit_counter(int nbr)
 {
-	int	pos;
+	int	bits;
 
-	pos = 0;
-	while (lst && *(int *)(lst->content) != target)
+	bits = 0;
+	while (nbr)
 	{
-		lst = lst->next;
-		pos++;
+		bits++;
+		nbr >>= 1;
 	}
-	return (pos);
+	return (bits);
 }
 
-static void	push_chunks(t_list **stack_a, t_list **stack_b, int chunk)
+static void	radix_pass(t_list **stack_a, t_list **stack_b, int bit, int size)
 {
-	int	pushed;
-	int	value;
+	int	i;
 
-	pushed = 0;
-	while (*stack_a)
+	i = 0;
+	while (i < size)
 	{
-		value = *(int *)((*stack_a)->content);
-		if (value <= pushed)
-		{
-			pb(stack_a, stack_b);
-			if (ft_lstsize(*stack_b) > 1)
-				rb(stack_b);
-			pushed++;
-		}
-		else if (value <= pushed + chunk)
-		{
-			pb(stack_a, stack_b);
-			pushed++;
-		}
-		else
+		if ((*(int *)((*stack_a)->content) >> bit) & 1)
 			ra(stack_a);
+		else
+			pb(stack_a, stack_b);
+		i++;
 	}
+	while (*stack_b)
+		pa(stack_a, stack_b);
 }
 
-static void	bring_max(t_list **stack_a, t_list **stack_b)
+void	radix_sort(t_list **stack_a, t_list **stack_b)
 {
 	int	size;
-	int	pos;
-
-	size = ft_lstsize(*stack_b);
-	pos = get_pos(*stack_b, size - 1);
-	if (pos <= size / 2)
-	{
-		while (pos-- > 0)
-			rb(stack_b);
-	}
-	else
-	{
-		while (pos++ < size)
-			rrb(stack_b);
-	}
-	pa(stack_a, stack_b);
-}
-
-void	chunk_sort(t_list **stack_a, t_list **stack_b)
-{
-	int	size;
-	int	chunk;
+	int	bits;
+	int	bit;
 
 	size = ft_lstsize(*stack_a);
-	if (size <= 150)
-		chunk = size / 8;
-	else
-		chunk = size / 14;
-	if (chunk < 1)
-		chunk = 1;
-	push_chunks(stack_a, stack_b, chunk);
-	while (*stack_b)
-		bring_max(stack_a, stack_b);
+	bits = bit_counter(size - 1);
+	bit = 0;
+	while (bit < bits && !is_sorted_list(stack_a))
+	{
+		radix_pass(stack_a, stack_b, bit, size);
+		bit++;
+	}
 }

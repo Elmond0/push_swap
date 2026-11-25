@@ -45,7 +45,7 @@ int		is_sorted_list(t_list **node);
 int		check_double(int **nbr);
 int		check_limits(char **nptr);
 int		check_numbers(char **nptr);
-void	chunk_sort(t_list **stack_a, t_list **stack_b);
+void	radix_sort(t_list **stack_a, t_list **stack_b);
 void	free_all(t_list **stack_a, t_list **stack_b, int **ind, int **tab);
 void	validate_input(char **av, int **tab);
 

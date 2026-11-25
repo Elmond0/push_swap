@@ -19,7 +19,7 @@ The project is about choosing the right algorithm for the right input size:
 
 - **Data structures** — both stacks are singly linked lists (`t_list` from my `libft`); every operation is a pointer manipulation, with no array shifting.
 - **Input normalisation** — each number is replaced by its **rank** (`0 … n-1`), so the sorting code never deals with negatives or huge values.
-- **Algorithm design** — a dedicated solution for 2, 3 and 4–5 numbers, and a **chunk-based algorithm** for bigger inputs.
+- **Algorithm design** — a dedicated solution for 2, 3 and 4–5 numbers, and a **radix sort** for bigger inputs.
 - **Complexity under constraints** — the output is judged by the *number of operations*, not by speed.
 - **Robust parsing** — wrong input must print `Error` on `stderr`, never crash and never leak.
 
@@ -49,23 +49,35 @@ Each instruction is printed on its own line.
 | 2 | `sa` if needed |
 | 3 | hard-coded case analysis (at most 2 moves) |
 | 4 – 5 | push the two smallest values to B, sort the remaining 2–3 in A, push back |
-| 6 + | **chunk sort** |
+| 6 + | **radix sort** |
 
-### Chunk sort (6+ numbers)
+### Radix sort (6+ numbers)
 
-1. **Normalise** — every value becomes its rank in the sorted order (`0 … n-1`).
-2. **Push to B in chunks** — the size of a chunk depends on `n` (`n/8` up to 150 numbers, `n/14` above). Looking at the top of A, with `pushed` elements already moved:
-   - value `<= pushed` → `pb` then `rb` (small values go to the bottom of B),
-   - value `<= pushed + chunk` → `pb`,
-   - otherwise `ra` to look at the next element.
-3. **Bring everything back** — until B is empty, find the **largest** value in B, rotate B in the *shortest* direction (`rb` or `rrb`) and `pa`. Since the maximum always arrives first, A ends up sorted in ascending order.
+Radix sort looks at one **bit** of the numbers at a time, from the least significant to the most significant, and is why the stacks hold *ranks* instead of raw values.
+
+1. **Normalise** — every value becomes its rank in the sorted order (`0 … n-1`), so only `bit_counter(n - 1)` bits matter (7 bits for 100 numbers, 9 for 500).
+2. **One pass per bit** — look at the top of A, `size` times:
+   - bit is `1` → `ra` (it stays in A),
+   - bit is `0` → `pb` (it goes to B).
+3. **Bring everything back** — `pa` until B is empty. A now keeps the numbers ordered by the bits seen so far.
+4. After the last bit the stack is sorted. The loop also **stops early** as soon as A is already sorted.
+
+The number of operations is almost constant (about `1.5 · n · bits`), which makes the algorithm very predictable.
 
 ### Performance
 
 Measured on 300 random runs per size (positive and negative numbers) and verified with `checker_linux` — every run sorted correctly (`OK`):
 
-| Numbers | Average | Worst seen | Limit in the subject |
-|:-------:|:-------:|:----------:|:--------------------:|
+| Numbers | Operations | Subject: full validation | Subject: minimal validation |
+|:-------:|:----------:|:------------------------:|:---------------------------:|
+| 3 | ≤ 2 | — | — |
+| 5 | ≤ 10 | — | — |
+| 100 | 1084 | fewer than 700 ✗ | under 1100 ✓ |
+| 500 | 6784 | no more than 5500 ✗ | under 8500 ✓ |
+
+Radix sort reaches the **minimal validation** tier of the subject benchmark; it cannot reach the full-validation limits with this approach.
+
+-------:|:-------:|:----------:|:--------------------:|
 | 3 | 1 | 2 | — |
 | 5 | 7 | 10 | — |
 | 100 | ~580 | 619 | fewer than 700 |
@@ -207,7 +219,7 @@ push_swap/
 ├── check_error.c     # Input validation: digits, INT limits, duplicates
 ├── operlist.c        # Parsing, stack creation, cleanup, error exit
 ├── utls.c            # Sorted check + dedicated algorithms for 3, 4 and 5 numbers
-├── sort_big.c        # Rank normalisation + chunk sort for 6+ numbers
+├── sort_big.c        # Rank normalisation + radix sort for 6+ numbers
 ├── swp.c             # sa, sb, ss
 ├── psh.c             # pa, pb
 ├── rtt.c             # ra, rb, rr
@@ -222,6 +234,7 @@ push_swap/
 
 - 42 curriculum — *push_swap* subject (v10.1)
 - [Sorting algorithm](https://en.wikipedia.org/wiki/Sorting_algorithm) and [Time complexity](https://en.wikipedia.org/wiki/Time_complexity) — Wikipedia
+- [Radix sort](https://en.wikipedia.org/wiki/Radix_sort) — Wikipedia
 - [Linked list](https://en.wikipedia.org/wiki/Linked_list) — Wikipedia
 - [GNU Make manual](https://www.gnu.org/software/make/manual/make.html)
 - [AddressSanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizer) — memory error and leak detector used for testing
@@ -231,7 +244,7 @@ push_swap/
 An AI assistant was used on this project for the following tasks:
 
 - **Review and debugging** — it helped find and fix the stray debug output, the wrong ordering of stack B in the 4–5 numbers case and the missing integer-limit check.
-- **Tuning** — comparing chunk sizes for the chunk sort with random benchmarks.
+- **Algorithm** — checking the radix sort implementation and its operation counts against the subject benchmarks.
 - **Testing and documentation** — writing the stress-test one-liners and this README.
 
 All AI-assisted changes were verified with `checker_linux`, random stress tests, AddressSanitizer and the Norminette.
@@ -240,7 +253,7 @@ All AI-assisted changes were verified with `checker_linux`, random stress tests,
 
 ## 🎯 Key Takeaways
 
-- Chose and **tuned an algorithm** against a measurable goal — the number of operations — instead of just making it work.
+- Implemented a **radix sort** on two stacks and measured it against a concrete goal — the number of operations — instead of just making it work.
 - Practiced **linked-list manipulation** with raw pointers, with no copies and no arrays.
 - Built **bullet-proof input parsing**: overflow, duplicates, signs and empty arguments.
 - Verified the result with an **external checker**, random stress tests and **AddressSanitizer** (no leaks, no errors).

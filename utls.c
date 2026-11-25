@@ -106,5 +106,5 @@ void	check_small_stacks(t_list **stack_a, t_list **stack_b)
 	else if (size == 5 || size == 4)
 		sort_five(stack_a, stack_b);
 	else
-		chunk_sort(stack_a, stack_b);
+		radix_sort(stack_a, stack_b);
 }
