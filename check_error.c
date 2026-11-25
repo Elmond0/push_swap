@@ -20,12 +20,11 @@ int	check_numbers(char **nptr)
 	i = 0;
 	while (nptr[i])
 	{
-		if (!ft_isdigit(nptr[i][0]))
-		{
-			if (nptr[i][0] != '+' && nptr[i][0] != '-')
-				return (0);
-		}
-		j = 1;
+		j = 0;
+		if (nptr[i][0] == '+' || nptr[i][0] == '-')
+			j = 1;
+		if (!nptr[i][j])
+			return (0);
 		while (nptr[i][j])
 		{
 			if (!ft_isdigit(nptr[i][j]))
@@ -37,14 +36,35 @@ int	check_numbers(char **nptr)
 	return (1);
 }
 
-int	check_limits(int **nbr)
+static int	in_limits(char *str)
+{
+	long long	nbr;
+	int			neg;
+
+	neg = (*str == '-');
+	if (*str == '-' || *str == '+')
+		str++;
+	nbr = 0;
+	while (*str)
+	{
+		nbr = nbr * 10 + (*str - '0');
+		if (nbr > 2147483648LL)
+			return (0);
+		str++;
+	}
+	if (neg)
+		return (nbr <= 2147483648LL);
+	return (nbr <= INT_MAX);
+}
+
+int	check_limits(char **nptr)
 {
 	unsigned int	i;
 
 	i = 0;
-	while (nbr[i])
+	while (nptr[i])
 	{
-		if (*(nbr[i]) < INT_MIN || *(nbr[i]) > INT_MAX)
+		if (!in_limits(nptr[i]))
 			return (0);
 		i++;
 	}

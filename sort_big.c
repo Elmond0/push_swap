@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   radix.c                                            :+:      :+:    :+:   */
+/*   sort_big.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elmondo <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -41,44 +41,78 @@ int	**normalize_tab(int tab_size, int **tab)
 	return (norm);
 }
 
-int	bit_counter(int nbr)
+static int	get_pos(t_list *lst, int target)
 {
-	int	bits;
+	int	pos;
 
-	bits = 0;
-	while (nbr)
+	pos = 0;
+	while (lst && *(int *)(lst->content) != target)
 	{
-		bits++;
-		nbr >>= 1;
+		lst = lst->next;
+		pos++;
 	}
-	return (bits);
+	return (pos);
 }
 
-void	radix_sort(t_list **stack_a, t_list **stack_b)
+static void	push_chunks(t_list **stack_a, t_list **stack_b, int chunk)
 {
-	unsigned int	stack_size;
-	unsigned int	i;
-	unsigned int	j;
-	unsigned int	bits;
-	int				value;
+	int	pushed;
+	int	value;
 
-	stack_size = ft_lstsize(*stack_a);
-	bits = bit_counter(stack_size);
-	i = 0;
-	while (i < bits)
+	pushed = 0;
+	while (*stack_a)
 	{
-		j = 0;
-		while (j < stack_size)
+		value = *(int *)((*stack_a)->content);
+		if (value <= pushed)
 		{
-			value = (*(int *)(*stack_a)->content);
-			if (((value >> i) & 1) == 1)
-				ra(stack_a);
-			else
-				pb(stack_a, stack_b);
-			j++;
+			pb(stack_a, stack_b);
+			if (ft_lstsize(*stack_b) > 1)
+				rb(stack_b);
+			pushed++;
 		}
-		while (*stack_b)
-			pa(stack_a, stack_b);
-		i++;
+		else if (value <= pushed + chunk)
+		{
+			pb(stack_a, stack_b);
+			pushed++;
+		}
+		else
+			ra(stack_a);
 	}
+}
+
+static void	bring_max(t_list **stack_a, t_list **stack_b)
+{
+	int	size;
+	int	pos;
+
+	size = ft_lstsize(*stack_b);
+	pos = get_pos(*stack_b, size - 1);
+	if (pos <= size / 2)
+	{
+		while (pos-- > 0)
+			rb(stack_b);
+	}
+	else
+	{
+		while (pos++ < size)
+			rrb(stack_b);
+	}
+	pa(stack_a, stack_b);
+}
+
+void	chunk_sort(t_list **stack_a, t_list **stack_b)
+{
+	int	size;
+	int	chunk;
+
+	size = ft_lstsize(*stack_a);
+	if (size <= 150)
+		chunk = size / 8;
+	else
+		chunk = size / 14;
+	if (chunk < 1)
+		chunk = 1;
+	push_chunks(stack_a, stack_b, chunk);
+	while (*stack_b)
+		bring_max(stack_a, stack_b);
 }

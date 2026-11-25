@@ -33,29 +33,6 @@ int	**parse_integer(int tab_size, char **nbrs)
 	return (tab);
 }
 
-void	print_list(t_list **head, char *list_name)
-{
-	t_list	*node;
-	int		value;
-	int		i;
-
-	if (!head)
-		return ;
-	i = 1;
-	node = *head;
-	ft_printf("\n------------%s---------------\n", list_name);
-	while (node)
-	{
-		value = *(int *)node->content;
-		ft_printf("node %d: \n", i);
-		ft_printf("content: %d\n", value);
-		ft_printf("next: %p\n", node->next);
-		node = node->next;
-		i++;
-	}
-	ft_printf("------------%s---------------\n\n", list_name);
-}
-
 t_list	**create_list(int list_size, void **args)
 {
 	t_list	**head;
@@ -95,7 +72,7 @@ void	free_all(t_list **stack_a, t_list **stack_b, int **ind, int **tab)
 
 void	validate_input(char **av, int **tab)
 {
-	if (!check_numbers(av) || !check_double(tab) || !check_limits(tab))
+	if (!check_numbers(av) || !check_double(tab) || !check_limits(av))
 	{
 		ft_free((void **)tab, -1);
 		ft_putstr_fd("Error\n", STDERR_FILENO);

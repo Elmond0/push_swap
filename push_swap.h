@@ -27,7 +27,6 @@ typedef struct s_data
 }	t_data;
 
 t_list	**create_list(int list_size, void **args);
-void	print_list(t_list **head, char *list_name);
 void	sa(t_list **stack_a);
 void	sb(t_list **stack_b);
 void	ss(t_list **stack_a, t_list **stack_b);
@@ -44,11 +43,10 @@ int		**parse_integer(int tab_size, char **nbrs);
 int		**normalize_tab(int tab_size, int **tab);
 int		is_sorted_list(t_list **node);
 int		check_double(int **nbr);
-int		check_limits(int **nbr);
+int		check_limits(char **nptr);
 int		check_numbers(char **nptr);
-void	radix_sort(t_list **stack_a, t_list **stack_b);
+void	chunk_sort(t_list **stack_a, t_list **stack_b);
 void	free_all(t_list **stack_a, t_list **stack_b, int **ind, int **tab);
 void	validate_input(char **av, int **tab);
-int		bit_counter(int nbr);
 
 #endif

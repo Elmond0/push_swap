@@ -23,7 +23,6 @@ int	is_sorted_list(t_list **node)
 			return (0);
 		current = current->next;
 	}
-	print_list(node, "sorted");
 	return (1);
 }
 
@@ -56,6 +55,16 @@ static void	sort_three(t_list **stack_a)
 	}
 }
 
+static void	order_b(t_list **stack_b)
+{
+	t_list	*top;
+
+	top = *stack_b;
+	if (top && top->next
+		&& *(int *)(top->content) < *(int *)(top->next->content))
+		sb(stack_b);
+}
+
 void	sort_five(t_list **stack_a, t_list **stack_b)
 {
 	int	count;
@@ -71,8 +80,7 @@ void	sort_five(t_list **stack_a, t_list **stack_b)
 		else
 			ra(stack_a);
 	}
-	if (!is_sorted_list(stack_b))
-		sb(stack_b);
+	order_b(stack_b);
 	if (ft_lstsize(*stack_a) == 2)
 	{
 		if (!is_sorted_list(stack_a))
@@ -89,17 +97,14 @@ void	check_small_stacks(t_list **stack_a, t_list **stack_b)
 	int	size;
 
 	size = ft_lstsize(*stack_a);
-	if (size == 1)
-		exit (EXIT_SUCCESS);
-	else if (size == 2)
-	{
-		if (!is_sorted_list(stack_a))
-			sa(stack_a);
-	}
+	if (size == 1 || is_sorted_list(stack_a))
+		return ;
+	if (size == 2)
+		sa(stack_a);
 	else if (size == 3)
 		sort_three(stack_a);
 	else if (size == 5 || size == 4)
 		sort_five(stack_a, stack_b);
 	else
-		radix_sort(stack_a, stack_b);
+		chunk_sort(stack_a, stack_b);
 }
